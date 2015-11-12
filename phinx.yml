@@ -16,8 +16,8 @@ environments:
     development:
         adapter: pgsql
         host: localhost
-        name: app-zero
-        user: app-zero
+        name: appzero
+        user: appzero
         pass: 123
         port: 5432
         charset: utf8

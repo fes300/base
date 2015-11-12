@@ -2,18 +2,19 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-// controllers
-use Appzero\Controller\AdminController;
-use Appzero\Controller\WebsiteController;
+//models
 
-// repositories
-use Appzero\Repository\MandrillApi;
-use Appzero\Repository\UserRepository;
+//libraries
+
+//repositories
+
+//controllers
 
 //Symfony components
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 
 //Extend Silex
 use Silex\Application;
@@ -41,8 +42,8 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $defaultDbConfiguration = array(
     'driver'    => 'pdo_pgsql',
     'host'      => 'localhost',
-    'dbname'    => 'app-zero',
-    'user'      => 'app-zero',
+    'dbname'    => 'appName',
+    'user'      => 'appName',
     'password'  => '123',
     'charset'   => 'utf8',
 );
@@ -66,75 +67,70 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
 
+//extend twig with global username and methods
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $username = empty($app['user']) ? "" : $app['user']->getUsername();
+    $twig->addGlobal('userName', $username);
+    $twig->addGlobal('chat', rand(0,999999999));
+
+    $filter = new Twig_SimpleFilter('convertObjectToArray', function ($object) {
+        if (gettype($object)!=='object') return $object;
+        return (array) $object;
+    });
+    $twig->addFilter($filter);
+
+    return $twig;
+}));
+
 //security
-$userRepo = new UserRepository($app['db']);
-$usersData = $userRepo->getUsersForSilex();
+// $userRepo = new UserRepository($app['db']);
+// $usersData = $userRepo->getUsersForSilex();
+//
+// $app->register(new Silex\Provider\SecurityServiceProvider(), array(
+//    'security.firewalls' =>  array(
+//        'admin' => array(
+//            'pattern' => '^/.*',
+//            'anonymous' => true,
+//            'http' => true,
+//            'form' => array(
+//                'login_path' => '/login',
+//                'check_path' => '/admin/login_check',
+//                'always_use_default_target_path' => true,
+//                'default_target_path' => '/admin/'
+//            ),
+//            'logout' => array(
+//                'logout_path' => '/admin/logout',
+//                'invalidate_session' => true
+//            ),
+//            'remember_me' => array(
+//                 'key' => '44pinc3d229ebqbvqa6bpvlhp3'
+//             ),
+//            'users' => $usersData
+//    )
+// )));
+//
+//
+// $app->register(new Silex\Provider\RememberMeServiceProvider());
+//
+// $app->get('/login', function( Request $request) use ($app) {
+//     return $app->render('login.html', array(
+//         'error'         => $app['security.last_error']($request),
+//         'last_username' => $app['session']->get('_security.last_username'),
+//     ));
+// });
 
-$app->register(
-    new Silex\Provider\SecurityServiceProvider(), array(
-       'security.firewalls' =>  array(
-           'admin' => array(
-               'pattern' => '\badmin\b',
-               'anonymous' => false,
-               'http' => true,
-               'form' => array(
-                   'login_path' => '/login',
-                   'check_path' => '/admin/login_check',
-                   'always_use_default_target_path' => true,
-                   'default_target_path' => '/admin/'
-               ),
-               'logout' => array(
-                   'logout_path' => '/admin/logout',
-                   'invalidate_session' => true
-               ),
-               'remember_me' => array(
-                    'key' => '44pinc3d229ebqbvqa6bpvlhp3'
-                ),
-               'users' => $usersData
-            )
-        )
-    )
-);
+$app->get('/', function ()  use ($app) {
+    // $userRepo = new UserRepository($app['db']);
+    //
+    // if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+    //     $user = $userRepo->getByUsername($app['user']->getUsername());
+    // } else {$user = '';}
 
-$app->register(
-    new Silex\Provider\RememberMeServiceProvider()
-);
-
-$app->get('/login', function( Request $request) use ($app) {
-    return $app->render('login.html', array(
-        'error'         => $app['security.last_error']($request),
-        'last_username' => $app['session']->get('_security.last_username'),
-    ));
+    return $app->render('home.twig', ['page'=>'home']);
 });
 
-// controllers
-$app->post('/sendMail', function ()  use ($app) {
-    $mandrill = new Mandrill('tf3QppbIhIQY7z-ZhdBd9Q');
-    $mandrillFunctions = new MandrillApi($app['db']);
-
-    $template_content = $mandrillFunctions->getContent($_POST);
-    $message = $mandrillFunctions->sendMessage($_POST);
-    $template_name = 'App-zeroContactForm';
-    $async = false;
-    $ip_pool = 'Main Pool';
-    $result = $mandrill->messages->sendTemplate($template_name, $template_content, $message, $async, $ip_pool);
-
-    if(!empty($_POST['email'])){
-        $mailFrom = $_POST['mailto'];
-        $_POST['mailto'] = $_POST['email'];
-        $_POST['email'] = $mailFrom;
-        $message = $mandrillFunctions->sendMessage($_POST);
-        $template_name = 'App-zeroRequestReceived';
-        $template_content = $mandrillFunctions->getContentForCustomer($_POST);
-        $result = $mandrill->messages->sendTemplate($template_name, $template_content, $message, $async, $ip_pool);
-    }
-    return $app->redirect('/'.$pageName);
-});
-
-$adminController = new AdminController($app);
-$app->mount('/admin', $adminController->build());
-
-$websiteController = new WebsiteController($app);
-$app->mount('/', $websiteController->build());
+// build Admin controller
+// $admin = new Admin($app);
+// $app->mount('/admin', $admin->build());
 
 return $app;

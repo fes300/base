@@ -87,10 +87,10 @@ apache:
     modules:
         - rewrite
     vhosts:
-        app-zero.dev:
-            servername: app-zero.dev
+        appzero.dev:
+            servername: appzero.dev
             serveraliases:
-                - www.app-zero.dev
+                - www.appzero.dev
             docroot: /var/www/app
             port: '80'
             setenv:
@@ -126,9 +126,9 @@ nginx:
     vhosts:
         utucfxy7bh9y:
             proxy: ''
-            server_name: app-zero.dev
+            server_name: appzero.dev
             server_aliases:
-                - www.app-zero.dev
+                - www.appzero.dev
             www_root: /var/www/web
             listen_port: '80'
             location: \.php$
@@ -228,10 +228,10 @@ postgresql:
         encoding: UTF8
         version: '9.3'
     databases:
-        app-zero:
+        appzero:
             grant: ALL
-            name: app-zero
-            user: app-zero
+            name: appzero
+            user: appzero
             password: '123'
             sql_file: ''
     adminer: '1'

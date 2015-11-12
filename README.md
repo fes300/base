@@ -1,6 +1,6 @@
-# app-zero
+# appzero
 Crea siti automatici
 
-http://app-zero.herokuapp.com
+http://appzero.herokuapp.com
 
-[![Circle CI Tests](https://circleci.com/gh/instilla/app-zero.svg?style=svg)](https://circleci.com/gh/instilla/app-zero)
+[![Circle CI Tests](https://circleci.com/gh/instilla/appzero.svg?style=svg)](https://circleci.com/gh/instilla/appzero)
