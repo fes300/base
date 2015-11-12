@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <title>{{title}}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="content-language" content="it"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="description" content="{{description}}"/>
+        <meta name="author" content="Instilla Srl"/>
+        {% include "/common/og.twig" %}
+        {% include "/common/dublincore.twig" %}
+        <link rel="icon" href="http://instilla.it/img/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" type="image/png" href="http://instilla.it/img/favicon.png"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+        <link href='http://fonts.googleapis.com/css?family={{(settings.fonts.paragraphs|split(','))[0]|replace({" ": "+",})}}:400,700,300,300italic,400italic,700italic' rel='stylesheet' type='text/css'/>
+        {% if settings.fonts.titles != settings.fonts.paragraphs %}
+            <link href='http://fonts.googleapis.com/css?family={{(settings.fonts.titles|split(','))[0]|replace({" ": "+",})}}:400,700,300,300italic,400italic,700italic' rel='stylesheet' type='text/css'/>
+        {% endif %}
+        {% if settings.fonts.logo != settings.fonts.paragraphs and settings.fonts.logo != settings.fonts.titles %}
+            <link href='http://fonts.googleapis.com/css?family={{(settings.fonts.logo|split(','))[0]|replace({" ": "+",})}}:400,700,300,300italic,400italic,700italic' rel='stylesheet' type='text/css'/>
+        {% endif %}
+        {% if settings.fonts.navbar is defined and settings.fonts.navbar != settings.fonts.logo and settings.fonts.navbar != settings.fonts.paragraphs and settings.fonts.navbar != settings.fonts.titles %}
+            <link href='http://fonts.googleapis.com/css?family={{(settings.fonts.navbar|split(','))[0]|replace({" ": "+",})}}:400,700,300,300italic,400italic,700italic' rel='stylesheet' type='text/css'/>
+        {% endif %}
+        <!--[if !IE ]> -->
+        <link rel="stylesheet/less" type="text/x-less" href="/css/style.css?{{random()}}" data-global-vars='{
+            "color-main": "{{settings.colors.main}}",
+            "color-antimain": "{% if settings.colors.antimain is defined %}{{settings.colors.antimain}}{% else %}{{settings.colors.background}}{% endif %}",
+            "color-text": "{{settings.colors.text}}",
+            "color-background": "{{settings.colors.background}}",
+            "font-logo": "{{settings.fonts.logo}}",
+            "font-titles": "{{settings.fonts.titles}}",
+            "font-paragraphs": "{{settings.fonts.paragraphs}}",
+            "font-navbar": "{% if settings.fonts.navbar is defined %}{{settings.fonts.navbar}}{% else %}{{settings.fonts.paragraphs}}{% endif %}"
+        }'/>
+        <!-- <![endif]-->
+        <!--[if lt IE 9]>
+            <style>
+                .container, footer > div, .main_spot > div {
+                    max-width: 800px;
+                    margin: auto;
+                }
+                .container, footer > div {
+                    width:85%;
+                }
+            </style>
+        <![endif]-->
+        {% if settings.customStyle is defined %}
+            <style type="text/css">
+                {% autoescape false %}
+                    {{settings.customStyle}}
+                {% endautoescape %}
+            </style>
+        {% endif %}
+    </head>
+    <body
+        {% if settings.general.background is defined %}
+            style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{{settings.general.background}});"
+        {% elseif settings.general.bodyTexture is defined %}
+            style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/textures/{{settings.general.bodyTexture}}.png);"
+        {% endif %}
+        {% if settings.general.textAlign is defined %}
+            class="text-{{settings.general.textAlign}}"
+        {% endif %}
+    >
+        {% include "loadingCover.twig" %}
+        <header>
+            <nav class="navbar{% if settings.general.navbarColorSet is defined %} colorSet{{settings.general.navbarColorSet}}{% endif %}"{% if settings.general.navbarTexture is defined %} style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/textures/{{settings.general.navbarTexture}}.png);"{% endif %}>
+                <div class="container">
+                    <div class="navbar-header">
+                        {% if pages|length > 1 %}
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                  <span class="icon-bar"></span>
+                                  <span class="icon-bar"></span>
+                                  <span class="icon-bar"></span>
+                            </button>
+                        {% endif %}
+                        <div id="logo">
+                            <a href="/">
+                                {% if logo %}
+                                    <img src="https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/logo.png?{{random()}}" alt="{{domain}} logo" title="{{title}}"/>
+                                {% else %}
+                                    <div>{{title}}</div>
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav pull-right">
+                            {% if pages|length > 1 %}
+                                {% for pageTitle, page in pages %}
+                                    {% if page.hidden is not defined or page.hidden != true %}
+                                        <li{% if (currentPage==pageTitle) %} class="active"{% endif %}><a href="{{pageTitle}}">{{page.title}}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <li><a href="#">&nbsp;</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        {% set sectionsToShow = [] %}
+        {% if attribute(pages, currentPage).sections is defined %}
+            {% set sectionsToShow = sectionsToShow|merge(attribute(pages, currentPage).sections) %}
+        {% endif %}
+        {% if commonSections is defined %}
+            {% set sectionsToShow = sectionsToShow|merge(commonSections) %}
+        {% endif %}
+
+        {% for section in sectionsToShow %}
+            <div
+                {% if (section|first).sectionId is defined %}
+                    id="{{(section|first).sectionId}}"
+                {% endif %}
+                class="section
+                {% if (section|first).colorSet is defined %}
+                    colorSet{{(section|first).colorSet}}
+                {% endif %}
+                {% if (section|first).sectionClass is defined %}
+                    {{(section|first).sectionClass}}
+                {% endif %}
+                {% if (section|first).sectionTextAlign is defined %}
+                    text-{{(section|first).sectionTextAlign}}
+                {% endif %}
+                "
+                {% if (section|first).sectionTexture is defined %}
+                    style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/textures/{{(section|first).sectionTexture}}.png);"
+                {% elseif (section|first).sectionBackground is defined %}
+                    style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{{(section|first).sectionBackground}});"
+                {% endif %}
+            >
+                <div
+                    {% if ((section|first).noContainer is not defined and (section|first).type != "cover") %}
+                        class="container"
+                    {% endif %}
+                >
+                    <div class="row"{% if (section|first).noContainer is defined %} style="padding: 0px;"{% endif %}>
+                        {% if section|length == 1 and (section|first).colspan is not defined and (section|first).type != "cover" and (section|first).noContainer is not defined %}<div class="col-md-2"></div>{% endif %}
+                        {% for paragraph in section %}
+                            {% if paragraph.type is defined and paragraph.type != "cover" and paragraph.type != "claim" and (section|first).noContainer is not defined %}
+                                {% if paragraph.colspan is defined %}
+                                    {% set colspan = paragraph.colspan %}
+                                {% else %}
+                                    {% if section|length == 1 %}
+                                        {% set colspan = 8 %}
+                                    {% else %}
+                                        {% set colspan = (12 / section|length)|round %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            <div
+                                class="paragraph
+                                {% if colspan is defined %}
+                                    col-md-{{colspan}}
+                                {% endif %}
+                                {% if paragraph.class is defined %}
+                                    {{paragraph.class}}
+                                {% endif %}
+                                {% if paragraph.textAlign is defined %}
+                                    text-{{paragraph.textAlign}}
+                                {% elseif paragraph.type is defined and paragraph.type == "claim" %}
+                                    text-center
+                                {% endif %}
+                                "
+                                {% if paragraph.id is defined %}
+                                    id="{{paragraph.id}}"
+                                {% endif %}
+                                {% if paragraph.texture is defined %}
+                                    style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/textures/{{paragraph.texture}}.png);"
+                                {% elseif paragraph.background is defined %}
+                                    style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{{paragraph.background}});"
+                                {% endif %}
+                            >
+                                {% if paragraph.title is defined %}
+                                    {% if paragraph.type == "hero" %}
+                                        <h1>{% autoescape false %}{{paragraph.title}}{% endautoescape %}</h1>
+                                    {% else %}
+                                        <h4>{% autoescape false %}{{paragraph.title}}{% endautoescape %}</h4>
+                                    {% endif %}
+                                {% endif %}
+                                {% if paragraph.subtitle is defined %}
+                                    <h6>{% autoescape false %}{{paragraph.subtitle}}{% endautoescape %}</h6>
+                                    <br/>
+                                {% endif %}
+                                {% autoescape false %}
+                                    {% if paragraph.type is defined %}
+                                        {% if paragraph.type == "paragraph" %}
+                                            {% if paragraph.image is defined %}
+                                                {% set image = paragraph.image %}
+                                                {% if image.href is defined %}
+                                                    <a href="{{image.href}}">
+                                                {% endif %}
+                                                <img
+                                                    src="https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{% if image.src is defined %}{{image.src}}{% endif %}?{{random()}}"
+                                                    alt="
+                                                    {% if image.alt is defined %}
+                                                        {{image.alt}}
+                                                    {% elseif image.src is defined %}
+                                                        {{(image.src|split('.'))|first}}
+                                                    {% endif %}"
+                                                    title="
+                                                    {% if image.title is defined %}
+                                                        {{image.title}}
+                                                    {% elseif image.alt is defined %}
+                                                        {{image.alt}}
+                                                    {% elseif image.src is defined %}
+                                                        {{(image.src|split('.'))|first}}
+                                                    {% endif %}"
+                                                />
+                                                {% if image.href is defined %}
+                                                    </a>
+                                                {% endif %}
+                                                <br/><br/>
+                                            {% endif %}
+                                            {% if paragraph.content is defined %}
+                                                <p>
+                                                    {% autoescape false %}{{paragraph.content}}{% endautoescape %}
+                                                </p>
+                                            {% endif %}
+                                        {% elseif paragraph.type == "claim" %}
+                                            <h2>
+                                                {% autoescape false %}{{paragraph.content}}{% endautoescape %}
+                                            </h2>
+                                        {% elseif paragraph.type == "image" %}
+                                            {% if paragraph.image is defined %}
+                                                {% set image = paragraph.image %}
+                                                {% if image.href is defined %}
+                                                    <a href="{{image.href}}">
+                                                {% endif %}
+                                                <img
+                                                    src="https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{% if image.src is defined %}{{image.src}}{% endif %}?{{random()}}"
+                                                    alt="
+                                                    {% if image.alt is defined %}
+                                                        {{image.alt}}
+                                                    {% elseif image.src is defined %}
+                                                        {{(image.src|split('.'))|first}}
+                                                    {% endif %}"
+                                                    title="
+                                                    {% if image.title is defined %}
+                                                        {{image.title}}
+                                                    {% elseif image.alt is defined %}
+                                                        {{image.alt}}
+                                                    {% elseif image.src is defined %}
+                                                        {{(image.src|split('.'))|first}}
+                                                    {% endif %}"
+                                                />
+                                                {% if image.href is defined %}
+                                                    </a>
+                                                {% endif %}
+                                                
+                                            {% endif %}
+                                        {% elseif paragraph.type == "cover" %}
+                                            <div class="jumbotron">
+                                                {% set image = paragraph.image %}
+                                                <img
+                                                    src="https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{% if image.src is defined %}{{image.src}}{% endif %}?{{random()}}"
+                                                    alt="
+                                                    {% if image.alt is defined %}
+                                                        {{image.alt}}
+                                                    {% elseif image.src is defined %}
+                                                        {{(image.src|split('.'))|first}}
+                                                    {% endif %}"
+                                                    title="
+                                                    {% if image.title is defined %}
+                                                        {{image.title}}
+                                                    {% elseif image.alt is defined %}
+                                                        {{image.alt}}
+                                                    {% elseif image.src is defined %}
+                                                        {{(image.src|split('.'))|first}}
+                                                    {% endif %}"
+                                                />
+                                            </div>
+                                        {% elseif paragraph.type == "gallery" %}
+                                            {%
+                                                set carouselNumber = random()
+                                            %}
+                                            <div id="carousel-{{carouselNumber}}" class="carousel slide" data-ride="carousel">
+                                                <!-- Indicators -->
+                                                <ol class="carousel-indicators">
+                                                    {% for index, slide in paragraph.content %}
+                                                        <li data-target="#carousel-{{carouselNumber}}" data-slide-to="{{index}}" {% if index == 0 %}class="active"{% endif %}></li>
+                                                    {% endfor %}
+                                                </ol>
+                                                <div class="carousel-inner" role="listbox">
+                                                    {% for index, image in paragraph.content %}
+                                                        <div class="item {% if index == 0 %}active{% endif %}">
+                                                            <img
+                                                                src="https://s3.eu-central-1.amazonaws.com/app-zero-storage/websites/{{domain}}/{% if image.src is defined %}{{image.src}}{% endif %}?{{random()}}"
+                                                                alt="
+                                                                {% if image.alt is defined %}
+                                                                    {{image.alt}}
+                                                                {% elseif image.src is defined %}
+                                                                    {{(image.src|split('.'))|first}}
+                                                                {% endif %}"
+                                                                title="
+                                                                {% if image.title is defined %}
+                                                                    {{image.title}}
+                                                                {% elseif image.alt is defined %}
+                                                                    {{image.alt}}
+                                                                {% elseif image.src is defined %}
+                                                                    {{(image.src|split('.'))|first}}
+                                                                {% endif %}"
+                                                            />
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <a class="left carousel-control" href="#carousel-{{carouselNumber}}" role="button" data-slide="prev">
+                                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="right carousel-control" href="#carousel-{{carouselNumber}}" role="button" data-slide="next">
+                                                    <br/>
+                                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
+                                        {% elseif paragraph.type == "map" %}
+                                            <input type="hidden" value = "<iframe width='100%' height='{% if paragraph.content.height is defined %}{{paragraph.content.height}}{% else %}300{% endif %}' frameborder='0' scrolling='no'  marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q={{paragraph.content.address|url_encode}}&amp;output=embed'></iframe>" class="iframePlaceholder">
+                                        {% elseif paragraph.type == "iframe" %}
+                                            <input type="hidden" value = "<iframe width='100%' height='{% if paragraph.content.height is defined %}{{paragraph.content.height}}{% else %}300{% endif %}' frameborder='0' scrolling='no'  marginheight='0' marginwidth='0' src='{% if paragraph.content.src is defined %}{{paragraph.content.src}}{% endif %}'></iframe>" class="iframePlaceholder">
+                                        {% elseif paragraph.type == "pdf" %}
+                                            <input type="hidden" value = "<object type='application/pdf' width='100%' height='{% if paragraph.content.height is defined %}{{paragraph.content.height}}{% else %}300{% endif %}' frameborder='0' marginheight='0' marginwidth='0' data='{% if paragraph.content.src is defined %}{{paragraph.content.src}}{% endif %}'><a href='{% if paragraph.content.src is defined %}{{paragraph.content.src}}{% endif %}'>{% if paragraph.content.alt is defined %}{{paragraph.content.alt}}{% else %}{% if paragraph.content.src is defined %}{{paragraph.content.src}}{% endif %}{% endif %}</a></object>" class="objectPlaceholder">
+                                        {% elseif paragraph.type == "list" %}
+                                            {% for item in paragraph.content %}
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        {% if item.icon is defined %}
+                                                            <i class="fa fa-{{item.icon}} fa-2x"></i>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-{% if item.price is defined %}6{% else %}10{% endif %}">
+                                                        {% if item.label is defined %}
+                                                            <h6>{{item.label}}</h6>
+                                                        {% endif %}
+                                                        <p>
+                                                            {% if item.href is defined %}
+                                                                <a href="{{item.href}}">
+                                                                    {% autoescape false %}
+                                                                        {% if item.text is defined %}
+                                                                            {{item.text}}
+                                                                        {% else %}
+                                                                            {{item.href}}
+                                                                        {% endif %}
+                                                                    {% endautoescape %}
+                                                                </a>
+                                                            {% else %}
+                                                                {% if item.text is defined %}
+                                                                    {% autoescape false %}
+                                                                        {{item.text}}
+                                                                    {% endautoescape %}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </p>
+                                                    </div>
+                                                    {% if item.price is defined %}
+                                                        <div class="col-md-4">
+                                                            <p>
+                                                                {{item. price}}
+                                                            </p>
+                                                        </div>
+                                                    {% endif %}
+                                                    <hr/>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endautoescape %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if contactForm.title is defined %}
+            <div id="contactFormSection" class="section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="text-center">
+                                <i class="fa fa-envelope fa-10x"></i>
+                                <h3>{{contactForm.title}}</h3>
+                                <br/><br/><br/>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-6 contactFormParagraph">
+                            {% if contactForm.description is defined %}
+                                <h6>{{contactForm.description}}</h6><br/>
+                            {% endif %}
+                            <form action="/sendMail" method="post">
+                                <input name="mailto" value="{{contactForm.mailto}}" id="contactForm_mailto" type="hidden">
+                                <input name="domain" value="{{domain}}" id="domain" type="hidden">
+                                {% for field in contactForm.fields %}
+                                    <div class="form-group">
+                                        {% if field.type == "textarea" %}
+                                            <textarea name="message" id="{{field.name}}" rows="5" placeholder="{{field.placeholder}}{% if field.required %} *{% endif %} " class="form-control"></textarea>
+                                        {% else %}
+                                            <input name="{{field.name}}" type="{{field.type}}" placeholder="{{field.placeholder}}{% if field.required %} *{% endif %}" class="form-control contactFormField">
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-success">{{contactForm.submit}}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if footer is defined %}
+            {% autoescape false %}<p class="siteFooter{% if settings.general.footerColorSet is defined %} colorSet{{settings.general.footerColorSet}}{% endif %}"{% if settings.general.footerTexture is defined %} style="background-image: url(https://s3.eu-central-1.amazonaws.com/app-zero-storage/textures/{{settings.general.footerTexture}}.png);"{% endif %}>{{footer}}</p>{% endautoescape %}
+        {% endif %}
+
+        {% if instillaCopyright is defined and instillaCopyright == true %}
+            <footer>
+                <div class="col-md-12 copyright"><p>Copyright © Instilla Srl. Tutti i diritti riservati.</p></div>
+                <div class="container">
+                    <div class="row">
+                      <div class="col-md-12"><p><a href="http://cresceredigitale.it">Crescere Digitale</a> è la soluzione di <a href="http://instilla.it">Instilla</a> per la visibilità online e il marketing digitale di professionisti e PMI.</p></div>
+                    </div>
+                </div>
+            </footer>
+        {% endif %}
+    </body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript" async></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.0/SmoothScroll.min.js" type="text/javascript" async></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+    <script src="/js/less.min.js" type="text/javascript" async></script>
+    <script src="/js/detectOldBrowser.js" type="text/javascript" async></script>
+    <script src="/js/smoothInPageScroll.js" type="text/javascript" async></script>
+    <script src="/js/loadingCover.js" type="text/javascript" async></script>
+</html>

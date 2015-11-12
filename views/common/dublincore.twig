@@ -1,0 +1,8 @@
+<meta name="DC.Title" content="{{title}}"/>
+<meta name="DC.Creator" content="http://instilla.it"/>
+<meta name="DC.Description" content="{{description}}"/>
+{% if keywords is defined %}
+	<meta name="DC.Subject" content="{{keywords|join(', ')}}"/>
+{% endif %}
+<meta name="DC.Date" content="{{created|date('Y-m-d')}}"/>
+<meta name="DC.Language" content="it"/>

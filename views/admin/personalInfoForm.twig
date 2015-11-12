@@ -1,0 +1,98 @@
+<div id="modifyMyPersonalInfo" class="container">
+    <h3>Change personal info</h3>
+    <form role="form" method="post" action="">
+        <div class="required">
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" class="form-control" name="first_name" placeholder="First Name" value="{{ user.first_name }}" required>
+            </div>
+        </div>
+        <br>
+        <div class="required">
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" class="form-control" name="last_name" placeholder="Last name" value="{{ user.last_name }}" required>
+            </div>
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-wrench"></span></span>
+            <input type="text" class="form-control" name="company" placeholder="Company" value="{{ user.company }}">
+        </div>
+        <span class="help-block">Leave blank if he/she is not part of a company.</span>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" name="username" placeholder="Username" value="{{ user.username }}" required>
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <input id="pass1" class="form-control" name='password' type='password' placeholder='New password'>
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
+            <input id="pass2" class="form-control" name='password2' type='password' onkeyup="checkPass2(); return false;" placeholder="Confirm new password">
+            <span id="confirmMessage2" class="confirmMessage"></span>
+        </div>
+        <br>
+        <input type="hidden" name="uuid" value="{{ user.uuid }}">
+    </form>
+    <div id="newUserInfo2"></div>
+    <button id="send2" class="btn btn-default">Submit</button>
+</div>
+
+<script>
+
+function checkPass2()
+{
+    if($('#pass1').val() == $('#pass2').val()){
+        $('#confirmMessage2').html("Passwords match!");
+        $('#confirmMessage2').removeClass('error');
+        $('#pass2').removeClass('error');
+        $('#confirmMessage2').addClass('success');
+        $('#pass2').addClass('success');
+        $('#send').removeClass('disabled');
+    }else{
+        $('#confirmMessage2').html("Passwords do not match");
+        $('#confirmMessage2').removeClass('success');
+        $('#pass2').removeClass('success');
+        $('#confirmMessage2').addClass('error');
+        $('#pass2').addClass('error');
+        $('#send').addClass('disabled');
+    }
+}
+
+$('#send2').click(function() {
+    var userData = {};
+    $.each($('#modifyMyPersonalInfo input'),function(){
+        var fieldName = $(this).attr('name');
+        var fieldValue = $(this).val();
+        userData[fieldName] = fieldValue;
+    });
+
+   $.ajax({
+      type: "POST",
+      url: '/admin/changeMyInfo',
+      data: userData,
+      error: function() {
+         $('#newUserInfo2').html('<p>An error has occurred</p>');
+      },
+      success: function(data) {
+          var text = '';
+          var response = data;
+          if(response =='usernameTaken'){
+              text = 'Sorry but the username is already taken.';
+              var description = '<p class="lastInfo2" style="color:red;">'+text+'</p>';
+          }else{
+              text = data;
+              var description = '<p class="lastInfo2" style="color:green;">'+text+'</p>';
+          }
+          $('.lastInfo2').remove();
+          $('#newUserInfo2').append(description);
+      }
+   });
+});
+
+</script>

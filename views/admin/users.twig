@@ -1,0 +1,162 @@
+<div id="addANewUser" class="col-sm-12 col-lg-12 col-md-12">
+    <h3 style="cursor: pointer;" onclick="showHide()">Add new user</h3>
+    <div id="addUserForm" style="display: none;" class="">
+        <form role="form" method="post" action="">
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" class="form-control" name="last_name" placeholder="Last name" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-wrench"></span></span>
+                <input type="text" class="form-control" name="company" placeholder="Company">
+            </div>
+            <span class="help-block">Leave blank if he/she is not part of a company.</span>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-wrench"></span></span>
+                <input type="text" class="form-control" name="domains" placeholder="Domains">
+            </div>
+            <span class="help-block">Separated by commas.</span>
+            <br />
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-king"></span></span>
+                <select id="role" class="form-control" name="role" required>
+                    <option value="ROLE_USER">Simple user</option>
+                    <option value="ROLE_ADMIN">Admin user</option>
+                </select>
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" class="form-control" name="username" placeholder="Username">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+                <input id="pass3" class="form-control" name='password' type='password' placeholder='Password' >
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-eye-close"></span></span>
+                <input id="pass4" class="form-control" name='password2' type='password' onkeyup="checkPass(); return false;" placeholder="Confirm password">
+                <span id="confirmMessage1" class="confirmMessage"></span>
+            </div>
+            <br>
+        </form>
+        <div id="newUserInfo"></div>
+        <button id="send" class="btn btn-default">Submit</button>
+    </div>
+</div>
+<div id="userList" style="margin-bottom: 150px;" class="col-sm-12 col-md-12 col-lg-12">
+    <h3>Users</h3>
+    <br />
+    {% for user in users %}
+    <div class="list-group">
+        <div class="list-group-item" data-toggle="collapse" data-target="#{{ user.uuid }}" style="cursor: pointer;"><h4>{{ user.username }}</h4></div>
+        <div id="{{ user.uuid }}" class="collapse margin-top">
+            <strong>{{ user.first_name }} {{ user.last_name }}</strong><br />
+            Company: {{ user.company }}<br />
+            Role: {{ user.role }}<br />
+            Domains: {% for domain in user.domains %}{% if loop.index != 1 and loop.index != user.domains|length %} ,{% endif %}{{ domain }}{% endfor %}<br /><br />
+            <strong class="right10">Active:<br /></strong> <input class="switch" type="checkbox" name="{{ user.uuid }}" {% if user.active %}checked{% endif %}><br />
+            <br />
+        </div>
+    </div>
+    {% endfor %}
+    <br /><br /><br />
+</div>
+
+<script>
+
+$(document).ready(function() {
+    $(".switch").bootstrapSwitch();
+
+    $('#userList input[type="checkbox"]').on('switchChange.bootstrapSwitch', function(event, state){
+        var uuid = $(this).attr('name');
+        dataToSend = {};
+        dataToSend['uuid']= uuid;
+        dataToSend['state']= state;
+        console.log(dataToSend);
+        $.ajax({
+            type: "POST",
+            url: '/admin/manageUserActivation',
+            data: dataToSend,
+            error: function() {
+                alert('An error has occurred');
+            },
+            success: function(data) {
+                console.log('user management ok');
+            }
+        });
+    });
+});
+
+function checkPass()
+{
+    if($('#pass3').val() == $('#pass4').val()){
+        $('#confirmMessage1').html("Passwords match!");
+        $('#confirmMessage1').removeClass('error');
+        $('#pass4').removeClass('error');
+        $('#confirmMessage1').addClass('success');
+        $('#pass4').addClass('success');
+        $('#send1').removeClass('disabled');
+    }else{
+        $('#confirmMessage1').html("Passwords do not match");
+        $('#confirmMessage1').removeClass('success');
+        $('#pass4').removeClass('success');
+        $('#confirmMessage1').addClass('error');
+        $('#pass4').addClass('error');
+        $('#send1').addClass('disabled');
+    }
+};
+
+
+function showHide(){
+    if($('#addUserForm').hasClass('show')){
+        $('#addUserForm').hide('slow');
+        $('#addUserForm').removeClass('show');
+    }else{
+        $('#addUserForm').show('slow');
+        $('#addUserForm').addClass('show');
+    }
+}
+
+$('#send').click(function() {
+    var userData = {};
+    $.each($('#addANewUser input'),function(){
+        var fieldName = $(this).attr('name');
+        var fieldValue = $(this).val();
+        userData[fieldName] = fieldValue;
+    });
+    userData['role'] = $('#role').val();
+    console.log(userData);
+
+   $.ajax({
+      type: "POST",
+      url: '/admin/user/create',
+      data: userData,
+      error: function() {
+         $('#newUserInfo').html('<p>An error has occurred</p>');
+      },
+      success: function(data) {
+          var text = '';
+          var response = data;
+          if(response =='usernameTaken'){
+              text = 'Sorry but the username is already taken.';
+              var description = '<p class="lastInfo" style="color:red;">'+text+'</p>';
+          }else{
+              text = 'Congratulations, you added a user with Uuid '+data+'.';
+              var description = '<p class="lastInfo" style="color:green;">'+text+'</p>';
+          }
+          $('.lastInfo').remove();
+          $('#newUserInfo').append(description);
+      }
+   });
+});
+</script>

@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="{% block description %} Instilla porta l'innovazione nella vita delle persone. {% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block title %} App-zero {% endblock %}">
+    <meta property="og:description" content="{{ block ('description') }}">
+
+    <title>{{block ('title') }}</title>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <link href='/css/animate.css' rel='stylesheet' type='text/css'>
+    <link href='/css/theme-styles.css' rel='stylesheet' type='text/css'>
+    <link href='/css/colors/color.css' rel='stylesheet' type='text/css'>
+    <link href='/css/custom-styles.css' rel='stylesheet' type='text/css'>
+    <link href="/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="/css/icon-moon.css" rel="stylesheet" media="screen">
+    <link href="/css/bootstrap-switch.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+
+
+    <!--Adding Media Queries and Canvas Support for IE8-->
+    <!--[if lt IE 9]>
+      <script src="js/respond.min.js"></script>
+      <script src="js/excanvas.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="/js/libs/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/js/libs/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="/js/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/jquery.touchSwipe.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/jquery.placeholder.js"></script>
+    <script type="text/javascript" src="/js/plugins/jquery.bxslider.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/smoothscroll.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <script src="/js/plugins/bootstrap-switch.min.js" type="text/javascript" async></script>
+  </head>
+
+  <body class="space-top index">
+    {% include 'admin/header.twig' %}
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

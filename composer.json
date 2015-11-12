@@ -1,0 +1,19 @@
+{
+    "require": {
+        "silex/silex": "~1.2",
+        "twig/twig": "~1.18",
+        "doctrine/dbal": "~2.2",
+        "robmorgan/phinx": "v0.4.3",
+        "aws/aws-sdk-php": "^3.0",
+        "ext-gd": "*",
+        "mandrill/mandrill": "1.0.*",
+        "symfony/security": "~2.7",
+        "symfony/debug": "~2.7",
+        "symfony/twig-bridge": "~2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "App-zero\\": "src/"
+        }
+    }
+}

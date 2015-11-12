@@ -1,0 +1,516 @@
+#spinner {
+  background: image_url('spinner.gif') no-repeat;
+}
+
+.hero {
+  background-color: - 215, 225, 236;
+}
+
+.footer {
+  padding: 22px 0 10px;
+  bottom: 0;
+  position: absolute;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.DELAY{
+    background-color: red;
+    margin-left: 4px;
+}
+
+#payments_wrapper{
+    padding-bottom: 100px;
+}
+
+.OK{
+    background-color: green;
+    margin-left: 4px;
+}
+
+.icon-set span {
+  font-family: 'Lato', sans-serif;
+}
+
+.countdown {
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  height: 100%;
+  margin-bottom: 150px;
+}
+
+.double-space-bottom ul li {
+    list-style-type: circle;
+    padding: 0 10px 20px 10px;
+    margin: 0;
+}
+
+.mode-change{
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+
+.double-space-bottom ul {
+    list-style-type: circle;
+    padding: 0;
+    margin: 0;
+}
+
+.margin-top{
+    margin-top: 20px;
+}
+
+.margin-bottom{
+    margin-bottom: 20px;
+}
+
+.big-margin-top{
+    margin-top: 80px;
+}
+
+.space{
+    height: 600px;
+}
+
+.bx-pager-link {
+	display: none !important;
+}
+
+.col-lg-8,
+.col-md-8{
+  margin:auto;
+  margin-top: 10%;
+}
+
+
+.secondcol{
+  float:right;
+}
+
+section{
+  margin-top:60px;
+}
+
+.text-left p {
+  text-align: justify;
+}
+
+#visibility1,
+#visibility2 {
+  padding-top: 10%;
+}
+
+img {
+  margin:auto;
+}
+
+.service{
+  margin-top: 10%;
+}
+
+
+.call-to-action {
+margin: 0;
+position: fixed;
+bottom: 0;
+right: 0;
+width: 190px;
+height: 190px;
+z-index: 100;
+display: none;
+text-decoration: none;
+color:#fff;
+background-color: rgba(246, 191, 35, 0.9);
+border-radius: 1px;
+font-size: 2em;
+text-align: center;
+margin-bottom: 0;
+padding: 5px;
+}
+
+.call-to-action p{
+  font-size: 0.6em;
+  padding: 0;
+}
+
+#close {
+    margin: 0;
+    position: fixed;
+    bottom: 190px;
+    right: 0;
+    z-index: 100;
+    display: none;
+    font-size: 2em;
+    float: right;
+    margin-right: 6px;
+    color: #000;
+    z-index:auto;
+}
+
+.tab-content.central{
+  margin-down: 50px;
+}
+
+.clients-list,
+.requests-info,
+.payments-info,
+.invoicing-info,
+.clients-payment-list {
+    padding: 0 5px;
+    position: fixed;
+    margin: auto;
+    width: 50%;
+    top:25%;
+    left: 25%;
+    color: rgba(246, 191, 35);
+    background-color: rgb(215, 225, 236);
+    border: 1px solid rgb(200, 225, 255);
+    border-radius: 1px;
+    z-index: 1000;
+    float:center;
+}
+
+
+
+.clients-list input,
+.clients-list textarea
+ {
+    display: block;
+    width: 90%;
+    margin-left:5%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgb(200, 225, 255);
+    padding: 4px;
+}
+
+#overlay {
+  background:rgba(0,0,0,0.7);
+  width:100%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:none;
+  text-align:center;
+  z-index:100;
+}
+
+#sendForm{
+    color: #fff;
+    background-color: rgb(0, 51, 0);
+}
+
+.pricing-plan{
+    border-radius:0;
+}
+
+.pricing-plan .body{
+    background:rgb(215, 225, 236);
+    border-radius:0;
+    height: 350px;
+}
+
+.pricing-plan .body ul{
+    height: 50%;
+}
+
+.pricing-plan .body ul li{
+    border:none;
+    max-height:50%;
+    padding: 7px;
+}
+
+.pricing-plan .buy-btn{
+    padding: 0 15px;
+}
+
+.buy-btn a{
+    background:rgb(0, 51, 0);
+    border-radius: 0 ;
+    display: block;
+    width: 100%;
+}
+
+.pricing-plan .header{
+    background:rgb(190, 209, 227);
+    border-radius: 0 ;
+}
+
+.colonne{
+    margin: 0 3.5%;
+    width:26.33333333%;
+}
+
+.row{
+    margin-bottom:50px;
+}
+
+.logoListino{
+    margin-bottom: 60px;
+    margin-top: 60px;
+}
+
+#note{
+    display: block;
+    padding:10px 0 0 60px;
+}
+
+.ref {
+    display: block;
+    margin-top: 20px;
+}
+
+#ref {
+    display: block;
+    margin-top: -40px;
+}
+
+
+.mychart{
+    display: block;
+    width:50%;
+    margin:0 25%;
+}
+
+
+.mychart2{
+    margin-bottom:3%;
+}
+.mychart3{
+    margin-top:1%;
+}
+.didascalia{
+    color: #fff;
+    display: inline-block;
+    background-color: rgba(255,111,105,1);
+    margin-top: 3%;
+    width: 20%;
+    height: 15%;
+    padding: 0 3px;
+}
+
+.didascalia2{
+    background-color: rgba(49,52,71,1);
+    margin-top: 1%;
+}
+
+.explain-stats{
+    margin: 5% 0;
+}
+
+.productContainer{
+    margin: 150px 0;
+}
+
+#overlay1{
+    background-color:#000;
+    z-index: 90;
+    display:inline;
+}
+
+.silver {
+    background-color:rgba(211,211,211, 0.5) !important;
+}
+
+.gold {
+    background-color:rgba(218,165,32, 0.7) !important;
+}
+
+.platinum {
+    background-color:rgba(140,156,177, 0.9) !important;
+}
+
+.regular {
+    background-color:rgba(52,123,179, 0.5) !important;
+}
+
+.plus {
+    background-color:rgba(117,208,166, 0.5) !important;
+}
+
+.border{
+    color: #fff;
+    border: 3px;
+    border-style: solid;
+}
+
+.global {
+    background-color:rgba(152,74,115, 0.5) !important;
+}
+
+.red{
+    background-color:red !important;
+}
+
+.active{
+    color: black;
+}
+
+.orange{
+    background-color:orange !important;
+}
+
+.green{
+    color:green !important;
+}
+
+.left-space{
+    margin-left: 20px;
+}
+
+@media screen and (max-width: 992px) {
+    .clients-list {
+      width: 70%;
+      top:15%;
+      left:15%;
+    }
+    .colonne{
+        margin: 0 1%;
+        width: 31.33333333%;
+    }
+    .mychart{
+        width:60%;
+        margin:0 20%;
+    }
+
+    canvas#lineChart {
+        display: block;
+        width: 80% !important;
+        margin:0 10%;
+        height: 100% !important;
+    }
+
+    .didascalia{
+        margin-top: 2%;
+        width: 20%;
+        height: 10%;
+        padding: 0 3px;
+    }
+
+    .didascalia2{
+        background-color: rgba(49,52,71,1);
+        margin-top: 0,5%;
+    }
+}
+
+@media screen and (max-width: 760px) {
+
+    .colonne{
+        margin: 0 3.5%;
+        width:93%;
+    }
+    canvas#lineChart {
+        width: 80% !important;
+        margin:0 10%;
+        height: 100% !important;
+    }
+    .didascalia{
+        margin-top: 2%;
+        width: 30%;
+        height: 20%;
+    }
+}
+
+@media screen and (max-width: 460px) {
+	.stiky-header .logo {
+		display: inline-block;
+		margin: 12px ;
+		width: 140px;
+	}
+
+	.stiky-header .logo-mobile {
+		display: none;
+	}
+
+	.container {
+		margin-left: 0;
+		padding: 0;
+	}
+
+	.stiky-header {
+        border: none ;
+    }
+
+    .space-top{
+        margin-top: 0 ;
+    }
+
+    .navi-toggle {
+        margin: 25px 10px 0 18px;
+    }
+
+    .double-space-bottom{
+      padding: 10%;
+    }
+
+    .service{
+      width: 30%;
+    }
+
+    .tab-content.central{
+      padding-top: 0;
+    }
+
+    .call-to-action {
+    margin: 0 5% 5% 0;
+    position: fixed;
+    width: 150px;
+    height: 150px;
+    font-size: 1.3em;
+    }
+
+    .call-to-action p{
+      font-size: 0.8em;
+      height: 100px;
+    }
+
+    #close {
+      font-size: 1.5em;
+      bottom: 170px;
+    }
+    .clients-list {
+      width: 90%;
+      max-width: 600px;
+      top:5%;
+      left: 5%;
+    }
+
+    .colonne{
+        margin: 0;
+        width: 100%;
+        padding:3%;
+    }
+    .page-header h2{
+        margin-top: 80px;
+    }
+
+    #note{
+        display: block;
+        padding:3px 0 0 25px;
+    }
+
+    canvas#lineChart {
+        width: 100% !important;
+        margin:0 0;
+        height: 100% !important;
+    }
+
+    .didascalia{
+        margin:1% 5%;
+        width: 50%;
+    }
+
+    .mychart3{
+        width: 100%;
+        margin:1% 5%;
+    }
+
+}

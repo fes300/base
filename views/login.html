@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>Crescere Digitale</title>
+    <meta content="it" http-equiv="content-language">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Il sito davvero smart!" name="description">
+    <meta content="Instilla Srl" name="author">
+    <meta content="cresceredigitale.it">
+    <meta content="http://instilla.it/img/logo.png">
+    <meta content="website">
+    <meta content="Crescere Digitale">
+    <meta content="Il sito davvero smart!">
+    <meta content="Crescere Digitale" name="DC.Title">
+    <meta content="http://instilla.it" name="DC.Creator">
+    <meta content="Il sito davvero smart!" name="DC.Description">
+    <meta content="2015-08-24" name="DC.Date">
+    <meta content="it" name="DC.Language">
+    <link href="http://instilla.it/img/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="http://instilla.it/img/favicon.png" rel="apple-touch-icon" type="image/png">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet"/>
+    <link href="css/custom.css" rel="stylesheet"/>
+    <style>
+        #loadingCover {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            top:0;
+            left: 0;
+            display: block;
+            z-index:999999;
+            background-color: #A0CF79;
+        }
+    </style>
+    <!--[if lt IE 9]>
+        <style>
+            .container, footer > div, .main_spot > div {
+                max-width: 800px; margin: auto;
+            }
+            .container, footer > div {
+                width:85%;
+            }
+        </style>
+    <![endif]-->
+</head>
+
+    <body>
+        <header class="stiky-header regular">
+        </header>
+        <form class="space-top index col-lg-2 col-md-2 col-sm-2" role="form" action="{{ path('admin_login_check') }}" method="post">
+            <h3 class="red">{{ error }}</h3>
+            <div class="form-group">
+                <label for='username'>Username: </label> <input class="form-control" type="text" name="_username" value="{{ last_username }}" />
+            </div>
+            <div class="form-group">
+                <label for='Password'>Password: </label><input class="form-control" type="password" name="_password" value="" />
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" id="remember_me" name="_remember_me" checked />Ricordati di me!</label>
+            </div>
+            <input type="submit" />
+        </form>
+    </body>
