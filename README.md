@@ -1,6 +1,5 @@
 # appzero
-Crea siti automatici
+
+Simple Silex app with authentication
 
 http://appzero.herokuapp.com
-
-[![Circle CI Tests](https://circleci.com/gh/instilla/appzero.svg?style=svg)](https://circleci.com/gh/instilla/appzero)

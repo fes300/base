@@ -72,9 +72,8 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $username = empty($app['user']) ? "" : $app['user']->getUsername();
     $twig->addGlobal('userName', $username);
-    $twig->addGlobal('chat', rand(0,999999999));
 
-    $filter = new Twig_SimpleFilter('convertObjectToArray', function ($object) {
+    $filter = new Twig_SimpleFilter('objectToArray', function ($object) {
         if (gettype($object)!=='object') return $object;
         return (array) $object;
     });
@@ -83,45 +82,46 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     return $twig;
 }));
 
-// // security
+// // security: uncomment when db is up and running
+
 // $userRepo = new UserRepository($app['db']);
 // $usersData = $userRepo->getUsersForSilex();
 
-// $app->register(new Silex\Provider\SecurityServiceProvider(), array(
-//    'security.firewalls' =>  array(
-//        'admin' => array(
-//            'pattern' => '^/.*',
-//            'anonymous' => true,
-//            'http' => true,
-//            'form' => array(
-//                'login_path' => '/login',
-//                'check_path' => '/admin/login_check',
-//                'always_use_default_target_path' => true,
-//                'default_target_path' => '/'
-//            ),
-//            'logout' => array(
-//                'logout_path' => '/admin/logout',
-//                'invalidate_session' => true
-//            ),
-//            'remember_me' => array(
-//                 'key' => '44pinc3d229ebqbvqa6bpvlhp3'
-//             ),
-//             'users' => array(
-//                 // raw password is foo, just put $usersData after db is set
-//                 'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
-//             )
-//    )
-// )));
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+   'security.firewalls' =>  array(
+       'admin' => array(
+           'pattern' => '^/.*',
+           'anonymous' => true,
+           'http' => true,
+           'form' => array(
+               'login_path' => '/login',
+               'check_path' => '/admin/login_check',
+               'always_use_default_target_path' => true,
+               'default_target_path' => '/'
+           ),
+           'logout' => array(
+               'logout_path' => '/admin/logout',
+               'invalidate_session' => true
+           ),
+           'remember_me' => array(
+                'key' => '44pinc3d229ebqbvqa6bpvlhp3'
+            ),
+            'users' => array(
+                // raw password is foo, just put $usersData after db is set
+                'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+            )
+   )
+)));
 
 // // remember me trough cookies
-// $app->register(new Silex\Provider\RememberMeServiceProvider());
+$app->register(new Silex\Provider\RememberMeServiceProvider());
 
-// $app->get('/login', function( Request $request) use ($app) {
-//     return $app->render('login.html', array(
-//         'error'         => $app['security.last_error']($request),
-//         'last_username' => $app['session']->get('_security.last_username'),
-//     ));
-// });
+$app->get('/login', function( Request $request) use ($app) {
+    return $app->render('login.html', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+    ));
+});
 
 $app->get('/', function ()  use ($app) {
     // $userRepo = new UserRepository($app['db']);
@@ -130,13 +130,8 @@ $app->get('/', function ()  use ($app) {
     //     $user = $userRepo->getByUsername($app['user']->getUsername());
     // } else {$user = '';}
 
-    // $user = $app['user']->getUsername();
-    $user = 'home';
+    $user = $app['user']->getUsername();
     return $app->render('home.twig', ['user'=>$user, 'page'=>'home']);
-});
-
-$app->get('/prova', function () use ($app){
-    return $app->render('home.twig', ['user'=>'prova', 'page'=>'home']);
 });
 
 // build Admin controller
