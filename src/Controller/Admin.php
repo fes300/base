@@ -12,7 +12,6 @@ class Admin {
 
     function build() {
         $app = $this->app;
-
         $admin = $app['controllers_factory'];
 
         $admin->get('/', function() use($app){
