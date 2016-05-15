@@ -135,7 +135,7 @@ $app->get('/', function ()  use ($app) {
     return $app->render('home.twig', ['user'=>$user, 'page'=>'home']);
 });
 
-$app->get('/prova',function () use ($app){
+$app->get('/prova', function () use ($app){
     return $app->render('home.twig', ['user'=>'prova', 'page'=>'home']);
 });
 
